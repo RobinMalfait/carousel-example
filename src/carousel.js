@@ -17,6 +17,10 @@ export function Carousel({ children, wrap = true, ...props }) {
   let [slides, setSlides] = useState([]);
   let [activeSlideIdx, setActiveSlideIdx] = useState(0);
 
+  let resolveActiveIndex = useEvent(() => {
+    return activeSlideIdx;
+  });
+
   let previous = useEvent((wrapAround = wrap) => {
     setActiveSlideIdx((current) => {
       return wrapAround
@@ -55,8 +59,16 @@ export function Carousel({ children, wrap = true, ...props }) {
   });
 
   let bag = useMemo(
-    () => ({ slides, activeSlideIdx, previous, next, goto, register }),
-    [slides, activeSlideIdx, previous, next, goto, register]
+    () => ({
+      slides,
+      activeSlideIdx,
+      previous,
+      next,
+      goto,
+      register,
+      resolveActiveIndex,
+    }),
+    [slides, activeSlideIdx, previous, next, goto, register, resolveActiveIndex]
   );
 
   useSwipe({
@@ -65,6 +77,7 @@ export function Carousel({ children, wrap = true, ...props }) {
   });
 
   useWindowEvent("keydown", (e) => {
+    if (e.defaultPrevented) return;
     if (e.target.hasAttribute("data-headlessui-component")) {
       if (e.key === "ArrowLeft") {
         e.preventDefault();
@@ -131,13 +144,35 @@ Carousel.NextButton = function NextButton({ children, ...props }) {
 };
 
 Carousel.Indicator = function Indicator({ children, slide, ...props }) {
-  let { goto } = useContext(CarouselContext);
+  let { goto, previous, next, slides, resolveActiveIndex } =
+    useContext(CarouselContext);
 
   return (
     <button
       data-headlessui-component="Carousel.Indicator"
+      data-headlessui-index={slides.indexOf(slide)}
       {...props}
       onClick={() => goto(slide)}
+      onKeyDown={(e) => {
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          previous();
+
+          requestAnimationFrame(() => {
+            let idx = resolveActiveIndex();
+            let el = document.querySelector(`[data-headlessui-index="${idx}"]`);
+            if (el) el.focus();
+          });
+        } else if (e.key === "ArrowRight") {
+          e.preventDefault();
+          next();
+          requestAnimationFrame(() => {
+            let idx = resolveActiveIndex();
+            let el = document.querySelector(`[data-headlessui-index="${idx}"]`);
+            if (el) el.focus();
+          });
+        }
+      }}
     >
       {children}
     </button>
