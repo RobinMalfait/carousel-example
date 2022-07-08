@@ -32,7 +32,7 @@ export default function App() {
                   <Card
                     active={activeIndex === i}
                     style={{
-                      transform: `translateX(calc(-100% * ${activeIndex}))`
+                      transform: `translateX(calc(-100% * ${activeIndex}))`,
                     }}
                   >
                     {content}

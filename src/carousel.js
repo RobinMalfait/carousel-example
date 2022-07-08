@@ -6,7 +6,7 @@ import React, {
   useRef,
   createContext,
   useMemo,
-  useId
+  useId,
 } from "react";
 import { useSwipe } from "./use-swipe";
 
@@ -60,7 +60,7 @@ export function Carousel({ children, wrap = true, ...props }) {
 
   useSwipe({
     left: () => next(false),
-    right: () => previous(false)
+    right: () => previous(false),
   });
 
   return (
