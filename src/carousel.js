@@ -144,8 +144,9 @@ Carousel.NextButton = function NextButton({ children, ...props }) {
 };
 
 Carousel.Indicator = function Indicator({ children, slide, ...props }) {
-  let { goto, previous, next, slides, resolveActiveIndex } =
-    useContext(CarouselContext);
+  let { goto, previous, next, slides, resolveActiveIndex } = useContext(
+    CarouselContext
+  );
 
   return (
     <button

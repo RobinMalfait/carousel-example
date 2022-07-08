@@ -8,8 +8,8 @@ export default function App() {
   let things = ["Hello 1", "Hello 2", "Hello 3", "Hello 4"];
 
   return (
-    <div className="w-screen h-screen grid place-content-center p-5 bg-gray-50">
-      <div className="bg-gray-100 rounded-md p-2 mb-2">
+    <div className="grid h-screen w-screen place-content-center bg-gray-50 p-5">
+      <div className="mb-2 rounded-md bg-gray-100 p-2">
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
@@ -22,11 +22,11 @@ export default function App() {
 
       <Carousel
         wrap={wrap}
-        className="relative flex flex-col bg-gray-100 flex overflow-hidden p-4 rounded-lg"
+        className="relative flex flex flex-col overflow-hidden rounded-lg bg-gray-100 p-4"
       >
         {({ slides, activeIndex }) => (
           <>
-            <Carousel.Slides className="snap-x px-20 bg-gray-100 flex gap-4 overflow-hidden p-4 rounded-lg">
+            <Carousel.Slides className="flex snap-x gap-4 overflow-hidden rounded-lg bg-gray-100 p-4 px-20">
               {things.map((content, i) => (
                 <Carousel.Slide key={i} className="snap-center">
                   <Card
@@ -41,25 +41,25 @@ export default function App() {
               ))}
             </Carousel.Slides>
 
-            <Carousel.PreviousButton className="absolute left-4 top-1/2 -translate-y-1/2 shadow bg-white opacity-25 hover:opacity-100 rounded-full w-12 h-12 shrink-0">
+            <Carousel.PreviousButton className="absolute left-4 top-1/2 h-12 w-12 shrink-0 -translate-y-1/2 rounded-full bg-white opacity-25 shadow hover:opacity-100">
               &larr;
             </Carousel.PreviousButton>
 
             {/* These could be <Tab> components if we make them composable */}
-            <div className="px-4 flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-2 px-4">
               {slides.map((slide, i) => (
                 <Carousel.Indicator
                   key={i}
                   slide={slide}
                   className={clsx(
-                    "rounded-full w-2 h-2",
+                    "h-2 w-2 rounded-full",
                     i === activeIndex ? "bg-gray-800" : "bg-gray-300"
                   )}
                 />
               ))}
             </div>
 
-            <Carousel.NextButton className="absolute right-4 top-1/2 -translate-y-1/2 shadow bg-white opacity-25 hover:opacity-100 rounded-full w-12 h-12 shrink-0">
+            <Carousel.NextButton className="absolute right-4 top-1/2 h-12 w-12 shrink-0 -translate-y-1/2 rounded-full bg-white opacity-25 shadow hover:opacity-100">
               &rarr;
             </Carousel.NextButton>
           </>
@@ -73,7 +73,7 @@ function Card({ children, active, ...props }) {
   return (
     <div
       className={clsx(
-        "transition duration-300 bg-white rounded-md w-[75vw] h-[40vh] grid place-content-center text-6xl",
+        "grid h-[40vh] w-[75vw] place-content-center rounded-md bg-white text-6xl transition duration-300",
         !active && "opacity-50"
       )}
       {...props}
