@@ -9,6 +9,7 @@ import React, {
   useId,
 } from "react";
 import { useSwipe } from "./use-swipe";
+import { useWindowEvent } from "./use-window-event";
 
 let CarouselContext = createContext();
 
@@ -63,6 +64,18 @@ export function Carousel({ children, wrap = true, ...props }) {
     right: () => previous(false),
   });
 
+  useWindowEvent("keydown", (e) => {
+    if (e.target.hasAttribute("data-headlessui-component")) {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        previous();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        next();
+      }
+    }
+  });
+
   return (
     <CarouselContext.Provider value={bag}>
       <div {...props}>{children({ slides, activeIndex: activeSlideIdx })}</div>
@@ -71,7 +84,11 @@ export function Carousel({ children, wrap = true, ...props }) {
 }
 
 Carousel.Slides = function Slides({ children, ...props }) {
-  return <div {...props}>{children}</div>;
+  return (
+    <div data-headlessui-component="Carousel.Slides" tabIndex={-1} {...props}>
+      {children}
+    </div>
+  );
 };
 
 Carousel.Slide = function Slide({ children, ...props }) {
@@ -80,13 +97,21 @@ Carousel.Slide = function Slide({ children, ...props }) {
 
   useEffect(() => register(id), [register, id]);
 
-  return <div {...props}>{children}</div>;
+  return (
+    <div data-headlessui-component="Carousel.Slide" {...props}>
+      {children}
+    </div>
+  );
 };
 
 Carousel.PreviousButton = function PreviousButton({ children, ...props }) {
   let { previous } = useContext(CarouselContext);
   return (
-    <button {...props} onClick={() => previous()}>
+    <button
+      data-headlessui-component="Carousel.PreviousButton"
+      {...props}
+      onClick={() => previous()}
+    >
       {children}
     </button>
   );
@@ -95,7 +120,11 @@ Carousel.PreviousButton = function PreviousButton({ children, ...props }) {
 Carousel.NextButton = function NextButton({ children, ...props }) {
   let { next } = useContext(CarouselContext);
   return (
-    <button {...props} onClick={() => next()}>
+    <button
+      data-headlessui-component="Carousel.NextButton"
+      {...props}
+      onClick={() => next()}
+    >
       {children}
     </button>
   );
@@ -105,7 +134,11 @@ Carousel.Indicator = function Indicator({ children, slide, ...props }) {
   let { goto } = useContext(CarouselContext);
 
   return (
-    <button {...props} onClick={() => goto(slide)}>
+    <button
+      data-headlessui-component="Carousel.Indicator"
+      {...props}
+      onClick={() => goto(slide)}
+    >
       {children}
     </button>
   );
